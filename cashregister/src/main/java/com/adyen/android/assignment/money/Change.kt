@@ -42,6 +42,12 @@ class Change {
         return this
     }
 
+    fun add(addition: Change) {
+        addition.getElements().forEach {
+            this@Change.add(it, addition.getCount(it))
+        }
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is Change) return false
