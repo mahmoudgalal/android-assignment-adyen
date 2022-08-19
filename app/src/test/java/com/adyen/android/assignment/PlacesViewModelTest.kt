@@ -1,6 +1,7 @@
 package com.adyen.android.assignment
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.lifecycle.testing.TestLifecycleOwner
 import com.adyen.android.assignment.data.api.PlacesService
 import com.adyen.android.assignment.data.mappers.NetworkToDomainMapper
 import com.adyen.android.assignment.data.model.ResponseWrapper
@@ -79,6 +80,7 @@ class PlacesViewModelTest {
                 }
             }
             placesViewModel = PlacesViewModel(nearbyPlacesUseCase, locationUseCase, logger)
+            placesViewModel.associatedLifeCycle = TestLifecycleOwner().lifecycle
             //Action
             placesViewModel.loadNearbyPlaces()
             placesViewModel.allPlaces.observeForTesting {

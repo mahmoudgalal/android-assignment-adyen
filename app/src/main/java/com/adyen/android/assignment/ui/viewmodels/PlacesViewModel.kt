@@ -1,9 +1,6 @@
 package com.adyen.android.assignment.ui.viewmodels
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.adyen.android.assignment.domain.Logger
 import com.adyen.android.assignment.domain.model.Location
 import com.adyen.android.assignment.domain.model.Place
@@ -22,6 +19,8 @@ class PlacesViewModel @Inject constructor(
     private val locationUseCase: LocationUseCase,
     private val logger: Logger
 ) : ViewModel() {
+
+    lateinit var associatedLifeCycle: Lifecycle
 
     private val _allPlaces: MutableLiveData<List<Place>> = MutableLiveData()
     val allPlaces: LiveData<List<Place>>
@@ -44,10 +43,11 @@ class PlacesViewModel @Inject constructor(
     fun loadNearbyPlaces() {
         viewModelScope.launch(exceptionHandler) {
             _loading.value = true
-            locationUseCase.fetchLocation().map {
-                logger.log(TAG, "Location:$it")
-                nearbyPlacesUseCase(it)
-            }.collect {
+            locationUseCase.fetchLocation().flowWithLifecycle(associatedLifeCycle)
+                .map {
+                    logger.log(TAG, "Location:$it")
+                    nearbyPlacesUseCase(it)
+                }.collect {
                 _loading.value = false
                 logger.log(TAG, "API Result:$it")
                 when (it) {

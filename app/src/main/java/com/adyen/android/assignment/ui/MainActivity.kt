@@ -56,6 +56,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = MainActivityBinding.inflate(layoutInflater)
         val view = binding.root
+        placesViewModel.associatedLifeCycle = lifecycle
         setContentView(view)
         initRecyclerAndObservers()
         checkPermission()
