@@ -119,6 +119,7 @@ class PlacesViewModelTest {
                 }
             }
             placesViewModel = PlacesViewModel(nearbyPlacesUseCase, locationUseCase, logger)
+            placesViewModel.associatedLifeCycle = TestLifecycleOwner().lifecycle
             // Action
             placesViewModel.loadNearbyPlaces()
             with(placesViewModel) {
